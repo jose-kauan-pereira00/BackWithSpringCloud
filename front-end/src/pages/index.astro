@@ -1,0 +1,71 @@
+---
+
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>To-do List</title>
+</head>
+<body>
+	<h1>Criar Nova Tarefa</h1>
+    
+    <form id="form-tarefa">
+      <div>
+        <label for="title">Descrição:</label>
+        <input type="text" id="title" name="title" required />
+      </div>
+      <div>
+        <label for="email">E-mail responsável:</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+      <button type="submit">Salvar Tarefa</button>
+    </form>
+
+    <p id="mensagem"></p>
+
+	<script>
+		const form = document.getElementById('form-tarefa');
+		const mensagem = document.getElementById('mensagem');
+
+		form.addEventListener('submit', async (evento) => {
+			evento.preventDefault();
+
+			const titulo = document.getElementById('title').value;
+			const email = document.getElementById('email').value;
+
+			const taskData = {
+			title: titulo,
+			email: email
+			};
+
+			try {
+			const resposta = await fetch('http://localhost:8081/task', {
+				method: 'POST',
+				headers: {
+				'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(taskData)
+			});
+
+			if (resposta.ok) {
+				const dados = await resposta.json();
+				mensagem.style.color = 'green';
+				mensagem.textContent = `Sucesso! Tarefa salva com ID: ${dados.id}`;
+				form.reset(); // Limpa os campos
+			} else {
+				mensagem.style.color = 'red';
+				mensagem.textContent = 'Erro ao salvar no servidor.';
+			}
+			} catch (erro) {
+			console.error(erro);
+			mensagem.style.color = 'red';
+			mensagem.textContent = 'Falha na comunicação com a API. O servidor Java está rodando?';
+			}
+		});
+	</script>
+</body>
+</html>

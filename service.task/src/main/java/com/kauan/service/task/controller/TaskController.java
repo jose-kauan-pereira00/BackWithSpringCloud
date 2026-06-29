@@ -1,6 +1,7 @@
 package com.kauan.service.task.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.kauan.service.task.repository.TaskRepository;
  */
 @RestController
 @RequestMapping("/tasks")
+@CrossOrigin(origins = "http://localhost:4321") //Obs: Me lembar de configurar isso direito caso vá colocar para produção a porta do astro é a http://localhost:4321
 public class TaskController {
 
     private final TaskRepository taskRepository;
